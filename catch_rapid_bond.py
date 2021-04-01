@@ -8,82 +8,22 @@ import re
 
 # version 2
 '''
-1 X分钟内涨幅≥X 且 起始涨幅＞X 则买入后X分钟卖出 |||| X分钟内涨幅≥X 且 起始涨幅＜X 则买入后X分钟卖出，
+1 X分钟内涨幅≥A  【起始涨幅＞A1 则买入后X1分钟卖出 ||||  起始涨幅＜A1 则买入后X2分钟卖出]，
 
-2 如果X分钟内 X≤涨幅＜X，且 起始跌幅＞X，则买入后X分钟卖出,|||| 如果X分钟内 X≤涨幅＜X，且 起始跌幅＜X，则买入后X分钟卖出
+2 Y分钟内 B≤涨幅＜A，[ 起始跌幅＞B1，则买入后X3分钟卖出,|||| 起始跌幅＜B1，则买入后X4分钟卖出]
 
-3 X分钟内跌幅≥X 且 起始涨幅＞X 则买入后X分钟卖出，|||| X分钟内跌幅≥X 且 起始涨幅＜X 则买入后X分钟卖出，
+3 Z分钟内跌幅≥C ,[ 起始涨幅＞C1 则买入后X5分钟卖出，||||  起始涨幅＜C1 则买入后X6分钟卖出]，
 
-4 如果X分钟内 X≤跌幅＜X，且 起始跌幅＞X，则买入后X分钟卖出 ||||| 如果X分钟内 X≤跌幅＜X，且 起始跌幅＜X，则买入后X分钟卖出
+4 W分钟内 D≤跌幅＜C，[ 起始跌幅＞D1，则买入后X7分钟卖出 ||||| 跌幅＜D2，则买入后X78分钟卖出]
 
 
+变量 X Y Z W 分钟
+时间区间涨幅 A，B，C，D
+其实涨幅与时间 A1，X1,X2
+B1 X3,X4
+C1 X5,X6
+D1 X7 X8
 '''
-
-CONDITION1 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION2 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION3 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION4 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION5 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION6 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION7 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-CONDITION8 = {
-'x_minute_buy': 10,
-'raise_percent_max':5,
-'raise_percent_min':5,
-'sell_time':10,
-'start_raise':2
-}
-
-
 
 
 '''
@@ -92,14 +32,38 @@ x1分钟内涨幅大于x11 且 起始涨幅大于sp1 则买入后m1分钟卖出�
 y1分钟内跌幅大于y11 且 起始跌幅大于sp3 则买入后n1分钟卖出，如果起始涨幅小于sp4，则买入n2X分钟卖出
 '''
 
+
+'''
+不同的字母代表不同的值，当然可以设置为一样的
+T1分钟内涨幅≥A1 且 起始涨幅＞B1 则买入后S1分钟卖出，
+T2分钟内涨幅≥A2 且 起始涨幅＜B2 则买入后S2分钟卖出，
+T3分钟内跌幅≥A3 且 起始涨幅＞B3 则买入后S3分钟卖出，
+T4分钟内跌幅≥A4 且 起始涨幅＜B4 则买入后S4分钟卖出，
+
+T5分钟内 C5≤涨幅＜A5，且 起始涨幅＜D5，则买入后S5分钟卖出
+T6分钟内 C6≤涨幅＜A6，且 起始涨幅＞D6，则买入后S6分钟卖出
+T7分钟内 C7≤跌幅＜A7，且 起始涨幅＞D7，则买入后S7分钟卖出
+T8分钟内 C8≤跌幅＜A8，且 起始涨幅＜D8，则买入后S8分钟卖出
+
+'''
+
+# 上涨
 X_MINUTE_UP = 20 # x1
+
 X00_PERCENT_UP = 5 # x11
+
+# 区间
+X00_PERCENT_UP_MAX=3
+X00_PERCENT_UP_MIN=2
+
 X_START_PERCENT_UP_LARGE = 2 # sp1
 X_START_PERCENT_UP_SMALL = 1 # sp2
 
 X10_SELL_MINUTE_UP = 25 #m1
 X11_SELL_MINUTE_UP = 25 #m2
 
+
+# 下跌
 X_MINUTE_DOWN=20 #y1
 X00_PERCENT_DOWN = -3 # 5%  y11
 X_START_PERCENT_DOWN_LARGE = -3 # sp3
